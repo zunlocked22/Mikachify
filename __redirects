@@ -1,5 +1,6 @@
 # Example of _redirects file
 
+# Remove .html extension for each page
 /        /index.html     200
-/        /tv.html     200
-/        /movies.html     200
+/tv      /tv.html        200
+/movies  /movies.html    200
