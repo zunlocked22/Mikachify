@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Streamify - TV Shows</title>
+  <!-- CHANGE: Link to tv.css instead of style.css -->
+  <link rel="stylesheet" href="css/tv.css"/>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="movies.html" class="nav-link">Movies</a>
+    <!-- NEW: Search form in the navbar -->
+    <form id="search-form" style="margin-left: auto;">
+      <input type="text" id="search-input" placeholder="Search TV shows..." autocomplete="off"/>
+      <button type="submit">Search</button>
+    </form>
+  </nav>
+  <header>
+    <h1>📺 TV Shows</h1>
+  </header>
+  <main>
+    <section>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <h2 id="tv-title">Popular TV Shows</h2>
+        <div>
+          <button id="sort-popular" class="sort-btn">Popular</button>
+          <button id="sort-top-rated" class="sort-btn">Top Rated</button>
+        </div>
+      </div>
+
+    <div style="margin-bottom:1rem;">
+        <label for="genre-select" style="color:#b3b3b3;">Filter by Genre:</label>
+        <select id="genre-select" style="margin-left:0.5rem;padding:0.4rem 0.7rem;border-radius:4px;">
+            <option value="">All</option>
+                <!-- Genres will be populated by JS -->
+        </select>
+    </div>
+
+      <!-- NEW: Search Results Section (initially hidden) -->
+      <section id="search-section" style="display:none;">
+        <h2>Search Results</h2>
+        <div class="media-grid" id="search-grid"></div>
+      </section>
+
+      <div class="media-grid" id="tv-grid"></div>
+      <div style="text-align:center;margin:2rem 0;">
+        <button id="prev-page" class="page-btn" disabled>Prev</button>
+        <span id="page-info" style="margin:0 1rem;">Page 1</span>
+        <button id="next-page" class="page-btn">Next</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal for streaming (reuse) -->
+<div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-content">
+        <span id="close-modal" class="close" tabindex="0" aria-label="Close">&times;</span>
+        <h3 id="modal-title"></h3>
+        <p id="modal-description" style="color:#b3b3b3;margin:0.5rem 0;"></p>
+        <p id="modal-genres" style="color:#b3b3b3;margin:0;"></p>
+
+        <!-- Season and Episode Select -->
+        <div id="season-episode-select" style="margin:1rem 0; display:none;">
+            <label for="season-select" style="color:#b3b3b3;">Season:</label>
+            <select id="season-select" style="margin:0 1rem 0 0; padding:0.3rem 0.7rem; border-radius:4px;"></select>
+            <label for="episode-select" style="color:#b3b3b3;">Episode:</label>
+            <select id="episode-select" style="padding:0.3rem 0.7rem; border-radius:4px;"></select>
+        </div>
+
+        <!-- Blockquote for error message -->
+        <blockquote class="blockquote-custom">
+            If you get any error message when trying to stream, please Refresh the page or Switch to another streaming server below.
+        </blockquote>
+
+        <!-- Server Selection -->
+        <div class="server-select">
+            <label for="server">Choose Server:</label>
+            <select id="server">
+                <option value="vidsrc.cc">vidsrc.cc</option>
+                <option value="vidsrc.me">vidsrc.me</option>
+                <option value="player.videasy.net">videasy.net</option>
+                <option value="server1.com">Server 1</option>
+                <option value="server2.com">Server 2</option>
+            </select>
+        </div>
+
+        <!-- Video Iframe -->
+        <iframe id="modal-video" width="100%" height="400" frameborder="0" allowfullscreen title="Streaming video"></iframe>
+    </div>
+</div>
+
+  <div id="loading" class="loading" style="display:none;">
+    <div style="text-align:center;padding:2rem;">
+      <span style="font-size:2rem;">⏳</span>
+      <div style="color:#b3b3b3;">Loading...</div>
+    </div>
+  </div>
+  <div id="toast" style="display:none;position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#232323;color:#fff;padding:1rem 2rem;border-radius:6px;z-index:2000;font-size:1rem;box-shadow:0 2px 8px rgba(0,0,0,0.2);"></div>
+  <script src="js/tv.js"></script>
+</body>
+</html>
