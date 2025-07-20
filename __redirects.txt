@@ -1,0 +1,5 @@
+# Example of _redirects file
+
+/        /index.html     200
+/        /tv.html     200
+/        /movies.html     200
