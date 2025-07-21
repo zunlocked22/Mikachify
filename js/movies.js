@@ -20,7 +20,7 @@ const genreSelect = document.getElementById('genre-select');
 
 const sortTopRatedBtn = document.getElementById('sort-top-rated');
 
-// NEW: Search elements
+// NEW: Search elements - Updated to match new HTML structure
 const searchForm = document.getElementById('search-form');
 const searchInput = document.getElementById('search-input');
 const searchGrid = document.getElementById('search-grid');
@@ -61,6 +61,11 @@ async function fetchMovies(page = 1, sort = 'popularity.desc') {
     // Hide search results if we're fetching main movies
     searchSection.style.display = 'none';
     moviesGrid.style.display = 'grid'; // Ensure main grid is visible
+    // Show pagination for main movie grid
+    prevPageBtn.style.display = '';
+    nextPageBtn.style.display = '';
+    pageInfo.style.display = '';
+
 
     let url = `${BASE_URL}/discover/movie?api_key=${API_KEY}&sort_by=${sort}&page=${page}`;
     if (sort === 'release_date.asc') url += '&primary_release_date.lte=2024-12-31';
@@ -187,13 +192,11 @@ function changeServer() {
   let embedURL = "";
   if (server === "vidsrc.cc") {
     embedURL = `https://vidsrc.cc/v2/embed/${type}/${currentItem.id}`;
-  } else if (server === "vidsrc.me") {
-    embedURL = `https://vidsrc.net/embed/${type}/?tmdb=${currentItem.id}`;
-  } else if (server === "player.videasy.net") {
-    embedURL = `https://player.videasy.net/${type}/${currentItem.id}`;
-  }else if (server === "server1.com") {
+  } else if (server === "vidzee.wtf") {
     embedURL = `https://player.vidzee.wtf/embed/${type}/${currentItem.id}`;
-  } else if (server === "server2.com") {
+  }else if (server === "player.videasy.net") {
+    embedURL = `https://player.videasy.net/${type}/${currentItem.id}`;
+  }else if (server === "autoembed.pro") {
     embedURL = `https://autoembed.pro/embed/${type}/${currentItem.id}`;
   }
   modalVideo.src = embedURL;
