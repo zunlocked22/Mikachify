@@ -3,22 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>MIKACHIFY - All Movies</title>
-  <!-- CHANGE: Link to movies.css instead of style.css -->
-  <link rel="stylesheet" href="css/movies.css"/>
+  <title>Streamify - All Movies</title>
+  <link rel="stylesheet" href="/css/movies.css"/>
 </head>
 <body>
   <nav class="navbar">
     <a href="index.html" class="nav-link">Home</a>
     <a href="tv.html" class="nav-link">TV Shows</a>
-    <!-- NEW: Search form in the navbar -->
-    <form id="search-form" style="margin-left: auto;">
-      <input type="text" id="search-input" placeholder="Search movies..." autocomplete="off"/>
-      <button type="submit">Search</button>
-    </form>
+    <!-- REMOVED: Search form from navbar -->
   </nav>
   <header>
     <h1>🎬 All Movies</h1>
+    <!-- NEW: Search container below the title -->
+    <div class="search-container">
+      <form id="search-form" class="search">
+        <input id="search-input" placeholder="Search movies..." type="text" autocomplete="off">
+        <button type="submit">Search</button>
+      </form>
+    </div>
   </header>
   <main>
     <section>
@@ -70,11 +72,10 @@
         <div class="server-select">
             <label for="server">Choose Server:</label>
             <select id="server">
-                <option value="vidsrc.cc">vidsrc.cc</option>
-                <option value="vidsrc.me">vidsrc.me</option>
-                <option value="player.videasy.net">videasy.net</option>
-                <option value="server1.com">Server 1</option>
-                <option value="server2.com">Server 2</option>
+                <option value="vidsrc.cc">Server 01</option>
+                <option value="vidzee.wtf">Server 02</option>
+                <option value="player.videasy.net">Server 03</option>
+                <option value="autoembed.pro">Server 04</option>
             </select>
         </div>
 
