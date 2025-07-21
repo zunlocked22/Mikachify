@@ -291,13 +291,11 @@ function changeServer() {
     // Construct the embed URL based on the selected server
     if (server === "vidsrc.cc") {
       embedURL = `https://vidsrc.cc/v2/embed/tv/${tvId}/${seasonNum}/${episodeNum}`;
-    } else if (server === "vidsrc.me") {
-      embedURL = `https://vidsrc.net/embed/tv/?tmdb=${tvId}&season=${seasonNum}&episode=${episodeNum}`;
+    } else if (server === "vidzee.wtf") {
+      embedURL = `https://player.vidzee.wtf/embed/tv/${tvId}/${seasonNum}/${episodeNum}`;
     } else if (server === "player.videasy.net") {
       embedURL = `https://player.videasy.net/tv/${tvId}-${seasonNum}-${episodeNum}`;
-    } else if (server === "server1.com") {
-      embedURL = `https://server2.com/embed/tv/${tvId}/${seasonNum}/${episodeNum}`;
-    } else if (server === "server2.com") {
+    } else if (server === "autoembed.pro") {
       embedURL = `https://server2.com/embed/tv/${tvId}/${seasonNum}/${episodeNum}`;
     }
   } else {
@@ -305,13 +303,11 @@ function changeServer() {
     const type = currentItem.media_type === "movie" ? "movie" : "tv";
     if (server === "vidsrc.cc") {
       embedURL = `https://vidsrc.cc/v2/embed/${type}/${currentItem.id}`;
-    } else if (server === "vidsrc.me") {
-      embedURL = `https://vidsrc.net/embed/${type}/?tmdb=${currentItem.id}`;
+    } else if (server === "vidzee.wtf") {
+      embedURL = `https://player.vidzee.wtf/embed/${type}/${currentItem.id}`;
     } else if (server === "player.videasy.net") {
       embedURL = `https://player.videasy.net/${type}/${currentItem.id}`;
-    } else if (server === "server1.com") {
-      embedURL = `https://player.vidzee.wtf/embed/${type}/${currentItem.id}`;
-    } else if (server === "server2.com") {
+    } else if (server === "autoembed.pro") {
       embedURL = `https://autoembed.pro/embed/${type}/${currentItem.id}`;
     }
   }
