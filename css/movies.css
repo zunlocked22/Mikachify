@@ -40,12 +40,13 @@ body {
   color: #e50914;
 }
 
-/* Search form styles (copied from style.css) */
+/* REMOVED: Old search form styles */
+/*
 #search-form {
   display: flex;
   width: 100%;
   max-width: 400px;
-  margin-left: auto; /* Pushes the search form to the right */
+  margin-left: auto;
   margin-right: 0;
 }
 
@@ -72,7 +73,7 @@ body {
 #search-form button:hover {
   background: #b0060f;
 }
-
+*/
 
 header {
   display: flex;
@@ -90,6 +91,53 @@ header h1 {
   letter-spacing: 2px;
   color: var(--accent);
 }
+
+/* NEW: Search container styling */
+.search-container {
+  width: 100%;
+  max-width: 400px; /* Adjust as needed */
+  margin: 1rem auto 0 auto; /* Center the search bar below the title */
+  text-align: center;
+}
+
+/* NEW: Search UI Design */
+.search {
+  display: inline-block;
+  position: relative;
+  width: 100%; /* Make it take full width of its container */
+}
+
+.search input[type="text"] {
+  width: calc(100% - 20px); /* Adjust width to account for padding */
+  padding: 10px;
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #333; /* Darker background for input */
+  color: var(--text); /* Text color */
+  outline: none; /* Remove outline on focus */
+}
+
+.search button[type="submit"] {
+  background-color: #e50914;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position: absolute;
+  top: 0;
+  right: 0;
+  transition: .9s ease;
+}
+
+.search button[type="submit"]:hover {
+  transform: scale(1.1);
+  color: rgb(255, 255, 255);
+  background-color: red;
+}
+
 
 main {
   padding: 2rem 1rem;
