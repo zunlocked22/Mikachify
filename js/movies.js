@@ -20,6 +20,7 @@ const genreSelect = document.getElementById('genre-select');
 
 const sortTopRatedBtn = document.getElementById('sort-top-rated');
 
+
 // NEW: Search elements - Updated to match new HTML structure
 const searchForm = document.getElementById('search-form');
 const searchInput = document.getElementById('search-input');
@@ -58,23 +59,35 @@ function debounce(func, delay) {
 async function fetchMovies(page = 1, sort = 'popularity.desc') {
   try {
     showLoading();
-    // Hide search results if we're fetching main movies
     searchSection.style.display = 'none';
-    moviesGrid.style.display = 'grid'; // Ensure main grid is visible
-    // Show pagination for main movie grid
+    moviesGrid.style.display = 'grid';
+
     prevPageBtn.style.display = '';
     nextPageBtn.style.display = '';
     pageInfo.style.display = '';
 
+    let url = `${BASE_URL}/discover/movie?api_key=${API_KEY}&page=${page}`;
 
-    let url = `${BASE_URL}/discover/movie?api_key=${API_KEY}&sort_by=${sort}&page=${page}`;
-    if (sort === 'release_date.asc') url += '&primary_release_date.lte=2024-12-31';
+    if (sort === 'popularity.desc') {
+        url += `&sort_by=popularity.desc`;
+    } else if (sort === 'top_rated_latest') {
+        url += `&sort_by=vote_average.desc`; // Primary sort by vote average
+        url += `&primary_release_date.gte=1900-01-01&primary_release_date.lte=2025-12-31`; // Date range
+        url += `&sort_by=primary_release_date.desc`; // Secondary sort by latest release date
+
+        // NEW: Filters to exclude N/A ratings and ensure sufficient votes
+        url += `&vote_count.gte=100`; // Only include movies with at least 100 votes
+        url += `&vote_average.gte=6.0`; // Only include movies with an average rating of 6.0 or higher
+    } else {
+        url += `&sort_by=${sort}`;
+    }
+
     if (selectedGenre) url += `&with_genres=${selectedGenre}`;
     const res = await fetch(url);
     if (!res.ok) throw new Error('Failed to fetch movies');
     const data = await res.json();
     totalPages = Math.min(data.total_pages, 500);
-    displayItems(data.results, moviesGrid); // Use displayItems for consistency
+    displayItems(data.results, moviesGrid);
     pageInfo.textContent = `Page ${currentPage}`;
     prevPageBtn.disabled = currentPage === 1;
     nextPageBtn.disabled = currentPage === totalPages;
@@ -86,6 +99,8 @@ async function fetchMovies(page = 1, sort = 'popularity.desc') {
     hideLoading();
   }
 }
+
+    
 
 // NEW: Search movies function (adapted from app.js)
 async function searchMovies(query) {
@@ -233,34 +248,21 @@ sortPopularBtn.onclick = () => {
 };
 
 //top rated button
-sortTopRatedBtn.onclick = async () => {
-  // Hide pagination for top rated (since it's a random selection)
-  prevPageBtn.style.display = 'none';
-  nextPageBtn.style.display = 'none';
-  pageInfo.style.display = 'none';
-  moviesGrid.style.display = 'grid'; // Ensure main grid is visible
-  searchSection.style.display = 'none'; // Hide search results
+    sortTopRatedBtn.onclick = async () => {
+      moviesGrid.style.display = 'grid';
+      searchSection.style.display = 'none';
 
-  const url = `${BASE_URL}/discover/movie?api_key=${API_KEY}&sort_by=vote_average.desc&primary_release_date.gte=2000-01-01&page=1`;
-  try {
-    showLoading();
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('Failed to fetch movies');
-    const data = await res.json();
-    const randomMovies = getRandomItems(data.results, 10); // Get 10 random movies
-    displayItems(randomMovies, moviesGrid); // Use displayItems
-    moviesTitle.textContent = 'Top Rated Movies';
-    currentPage = 1; // Reset to first page
-    sortTopRatedBtn.classList.add('active');
-    sortPopularBtn.classList.remove('active'); // Ensure other sort buttons are inactive
-  } catch (err) {
-    showToast('Error loading movies.');
-    moviesGrid.innerHTML = '<p style="color:#b3b3b3;">Failed to load movies.</p>';
-  } finally {
-    hideLoading();
-  }
-};
+      // NEW: Set sortBy to the specific value for Top Rated (Latest)
+      sortBy = 'top_rated_latest';
+      moviesTitle.textContent = 'Top Rated Movies';
+      currentPage = 1;
 
+      await fetchMovies(currentPage, sortBy); // Pass the new sortBy value
+
+      sortTopRatedBtn.classList.add('active');
+      sortPopularBtn.classList.remove('active');
+    };
+    
 function getRandomItems(arr, count) {
   const shuffled = arr.sort(() => 0.5 - Math.random());
   return shuffled.slice(0, count);
