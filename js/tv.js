@@ -24,7 +24,7 @@ const episodeSelect = document.getElementById('episode-select');
 
 const sortTopRatedBtn = document.getElementById('sort-top-rated');
 
-// NEW: Search elements
+// NEW: Search elements - Updated to match new HTML structure
 const searchForm = document.getElementById('search-form');
 const searchInput = document.getElementById('search-input');
 const searchGrid = document.getElementById('search-grid');
@@ -64,18 +64,35 @@ function debounce(func, delay) {
 async function fetchTV(page = 1, sort = 'popularity.desc') {
   try {
     showLoading();
-    // Hide search results if we're fetching main TV shows
     searchSection.style.display = 'none';
-    tvGrid.style.display = 'grid'; // Ensure main grid is visible
+    tvGrid.style.display = 'grid';
 
-    let url = `${BASE_URL}/discover/tv?api_key=${API_KEY}&sort_by=${sort}&page=${page}`;
-    if (sort === 'first_air_date.asc') url += '&first_air_date.lte=2024-12-31';
+    prevPageBtn.style.display = '';
+    nextPageBtn.style.display = '';
+    pageInfo.style.display = '';
+
+    let url = `${BASE_URL}/discover/tv?api_key=${API_KEY}&page=${page}`;
+
+    if (sort === 'popularity.desc') {
+        url += `&sort_by=popularity.desc`;
+    } else if (sort === 'top_rated_latest') {
+        url += `&sort_by=vote_average.desc`; // Primary sort by vote average
+        url += `&first_air_date.gte=1900-01-01&first_air_date.lte=2025-12-31`; // Date range
+        url += `&sort_by=first_air_date.desc`; // Secondary sort by latest air date
+
+        // NEW: Filters to exclude N/A ratings and ensure sufficient votes
+        url += `&vote_count.gte=100`; // Only include TV shows with at least 100 votes
+        url += `&vote_average.gte=6.0`; // Only include TV shows with an average rating of 6.0 or higher
+    } else {
+        url += `&sort_by=${sort}`;
+    }
+
     if (selectedGenre) url += `&with_genres=${selectedGenre}`;
     const res = await fetch(url);
     if (!res.ok) throw new Error('Failed to fetch TV shows');
     const data = await res.json();
     totalPages = Math.min(data.total_pages, 500);
-    displayItems(data.results, tvGrid); // Use displayItems for consistency
+    displayItems(data.results, tvGrid);
     pageInfo.textContent = `Page ${currentPage}`;
     prevPageBtn.disabled = currentPage === 1;
     nextPageBtn.disabled = currentPage === totalPages;
@@ -87,6 +104,7 @@ async function fetchTV(page = 1, sort = 'popularity.desc') {
     hideLoading();
   }
 }
+
 
 // NEW: Search TV shows function (adapted from app.js)
 async function searchTV(query) {
@@ -254,13 +272,11 @@ function changeServer() {
     // Construct the embed URL based on the selected server
     if (server === "vidsrc.cc") {
       embedURL = `https://vidsrc.cc/v2/embed/tv/${tvId}/${seasonNum}/${episodeNum}`;
-    } else if (server === "vidsrc.me") {
-      embedURL = `https://vidsrc.net/embed/tv/?tmdb=${tvId}&season=${seasonNum}&episode=${episodeNum}`;
-    } else if (server === "player.videasy.net") {
-      embedURL = `https://player.videasy.net/tv/${tvId}-${seasonNum}-${episodeNum}`;
-    } else if (server === "server1.com") {
+    } else if (server === "vidzee.wtf") {
       embedURL = `https://player.vidzee.wtf/embed/tv/${tvId}/${seasonNum}/${episodeNum}`;
-    } else if (server === "server2.com") {
+    }else if (server === "player.videasy.net") {
+      embedURL = `https://player.videasy.net/tv/${tvId}-${seasonNum}-${episodeNum}`;
+    }  else if (server === "autoembed.pro") {
       embedURL = `https://autoembed.pro/embed/tv/${tvId}/${seasonNum}/${episodeNum}`;
     }
   } else {
@@ -268,13 +284,11 @@ function changeServer() {
     const type = currentItem.media_type === "movie" ? "movie" : "tv"; // Ensure type is 'tv' for TV shows
     if (server === "vidsrc.cc") {
       embedURL = `https://vidsrc.cc/v2/embed/${type}/${currentItem.id}`;
-    } else if (server === "vidsrc.me") {
-      embedURL = `https://vidsrc.net/embed/${type}/?tmdb=${currentItem.id}`;
+    } else if (server === "vidzee.wtf") {
+      embedURL = `https://player.vidzee.wtf/embed/${type}/${currentItem.id}`;
     } else if (server === "player.videasy.net") {
       embedURL = `https://player.videasy.net/${type}/${currentItem.id}`;
-    } else if (server === "server1.com") {
-      embedURL = `https://player.vidzee.wtf/embed/${type}/${currentItem.id}`;
-    } else if (server === "server2.com") {
+    } else if (server === "autoembed.pro") {
       embedURL = `https://autoembed.pro/embed/${type}/${currentItem.id}`;
     }
   }
@@ -320,34 +334,20 @@ function getRandomItems(arr, count) {
 }
 
 // Event listeners
-sortTopRatedBtn.onclick = async () => {
-  // Hide pagination for top rated (since it's a random selection)
-  prevPageBtn.style.display = 'none';
-  nextPageBtn.style.display = 'none';
-  pageInfo.style.display = 'none';
-  tvGrid.style.display = 'grid'; // Ensure main grid is visible
-  searchSection.style.display = 'none'; // Hide search results
+    sortTopRatedBtn.onclick = async () => {
+      tvGrid.style.display = 'grid';
+      searchSection.style.display = 'none';
 
-  const url = `${BASE_URL}/discover/tv?api_key=${API_KEY}&sort_by=vote_average.desc&page=1`;
-  try {
-    showLoading();
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('Failed to fetch TV shows');
-    const data = await res.json();
-    const randomTVShows = getRandomItems(data.results, 10); // Get 10 random TV shows
-    displayItems(randomTVShows, tvGrid); // Use displayItems
-    tvTitle.textContent = 'Top Rated TV Shows';
-    currentPage = 1; // Reset to first page
-    sortTopRatedBtn.classList.add('active');
-    sortPopularBtn.classList.remove('active'); // Ensure other sort buttons are inactive
-  } catch (err) {
-    console.error('Error:', err); // Log the error
-    showToast('Error loading TV shows.');
-    tvGrid.innerHTML = '<p style="color:#b3b3b3;">Failed to load TV shows.</p>';
-  } finally {
-    hideLoading();
-  }
-};
+      // NEW: Set sortBy to the specific value for Top Rated (Latest)
+      sortBy = 'top_rated_latest';
+      tvTitle.textContent = 'Top Rated TV Shows';
+      currentPage = 1;
+
+      await fetchTV(currentPage, sortBy); // Pass the new sortBy value
+
+      sortTopRatedBtn.classList.add('active');
+      sortPopularBtn.classList.remove('active');
+    };
 
 // NEW: Debounced search (on input)
 searchInput.addEventListener('input', debounce(() => {
