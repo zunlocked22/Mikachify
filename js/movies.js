@@ -10,7 +10,7 @@ const closeModalBtn = document.getElementById('close-modal');
 const modalTitle = document.getElementById('modal-title');
 const modalVideo = document.getElementById('modal-video');
 const serverSelect = document.getElementById('server');
-const pageInfo = document.getElementById('page-info');
+//const pageInfo = document.getElementById('page-info');
 const prevPageBtn = document.getElementById('prev-page');
 const nextPageBtn = document.getElementById('next-page');
 const sortPopularBtn = document.getElementById('sort-popular');
@@ -64,33 +64,32 @@ async function fetchMovies(page = 1, sort = 'popularity.desc') {
 
     prevPageBtn.style.display = '';
     nextPageBtn.style.display = '';
-    pageInfo.style.display = '';
 
     let url = `${BASE_URL}/discover/movie?api_key=${API_KEY}&page=${page}`;
 
     if (sort === 'popularity.desc') {
         url += `&sort_by=popularity.desc`;
     } else if (sort === 'top_rated_latest') {
-        url += `&sort_by=vote_average.desc`; // Primary sort by vote average
-        url += `&primary_release_date.gte=1900-01-01&primary_release_date.lte=2025-12-31`; // Date range
-        url += `&sort_by=primary_release_date.desc`; // Secondary sort by latest release date
-
-        // NEW: Filters to exclude N/A ratings and ensure sufficient votes
-        url += `&vote_count.gte=100`; // Only include movies with at least 100 votes
-        url += `&vote_average.gte=6.0`; // Only include movies with an average rating of 6.0 or higher
-    } else {
-        url += `&sort_by=${sort}`;
+        url += `&sort_by=vote_average.desc`;
+        url += `&primary_release_date.gte=1900-01-01&primary_release_date.lte=2025-12-31`;
+        url += `&sort_by=primary_release_date.desc`;
+        url += `&vote_count.gte=100&vote_average.gte=6.0`;
     }
 
     if (selectedGenre) url += `&with_genres=${selectedGenre}`;
+    
     const res = await fetch(url);
     if (!res.ok) throw new Error('Failed to fetch movies');
     const data = await res.json();
     totalPages = Math.min(data.total_pages, 500);
     displayItems(data.results, moviesGrid);
-    pageInfo.textContent = `Page ${currentPage}`;
+    
+    // Update pagination UI
+    updatePagination(currentPage, totalPages);
+    
     prevPageBtn.disabled = currentPage === 1;
     nextPageBtn.disabled = currentPage === totalPages;
+    
     if (data.results.length === 0) showToast('No movies found.');
   } catch (err) {
     showToast('Error loading movies.');
@@ -99,8 +98,7 @@ async function fetchMovies(page = 1, sort = 'popularity.desc') {
     hideLoading();
   }
 }
-
-    
+   
 
 // NEW: Search movies function (adapted from app.js)
 async function searchMovies(query) {
@@ -175,6 +173,106 @@ function displayItems(items, grid) {
     grid.appendChild(card);
   });
 }
+
+   function updatePagination() {
+     const container = document.getElementById('page-numbers');
+     container.innerHTML = '';
+
+     // Create a page button
+     const makeBtn = (num) => {
+       const btn = document.createElement('button');
+       btn.className = 'page-number';
+       btn.textContent = num;
+       if (num === currentPage) btn.classList.add('active');
+
+       btn.addEventListener('click', () => {
+         if (num !== currentPage) {
+           currentPage = num;
+           fetchMovies(currentPage, sortBy); // Only call fetchMovies
+         }
+       });
+
+       return btn;
+     };
+
+     // Always show first page
+     container.appendChild(makeBtn(1));
+
+     // Show left gap if needed
+     if (currentPage > 3) {
+       const dots = document.createElement('span');
+       dots.className = 'dots';
+       dots.textContent = '...';
+       container.appendChild(dots);
+     }
+
+     // Middle pages (current-1 to current+1)
+     const start = Math.max(2, currentPage - 1);
+     const end = Math.min(totalPages - 1, currentPage + 1);
+     for (let i = start; i <= end; i++) {
+       container.appendChild(makeBtn(i));
+     }
+
+     // Show right gap if needed
+     if (currentPage < totalPages - 2) {
+       const dots = document.createElement('span');
+       dots.className = 'dots';
+       dots.textContent = '...';
+       container.appendChild(dots);
+     }
+
+     // Show last page if different from first
+     if (totalPages > 1) {
+       container.appendChild(makeBtn(totalPages));
+     }
+   }
+   
+
+
+function createPageNumber(number, currentPage) {
+  const pageNumbers = document.getElementById('page-numbers');
+
+  // Create a button for the page number
+  const pageNumber = document.createElement('button');
+  pageNumber.classList.add('page-number');
+
+  // Set the active class if this is the current page
+  if (number === currentPage) {
+    pageNumber.classList.add('active');
+  }
+
+  pageNumber.textContent = number;
+
+  // Add click event listener to change the page
+  pageNumber.addEventListener('click', () => {
+    // Update the current page
+    currentPage = number;
+
+    // Fetch the movies or TV shows for the selected page
+    if (window.location.pathname.includes('movies.html')) {
+      fetchMovies(currentPage, sortBy);
+    } else {
+      fetchTV(currentPage, sortBy);
+    }
+
+    // Update the pagination to reflect the new current page
+    updatePagination(currentPage, totalPages);
+  });
+
+  // Append the page number button to the pagination container
+  pageNumbers.appendChild(pageNumber);
+}
+
+
+function createDots() {
+  const pageNumbers = document.getElementById('page-numbers');
+  const dots = document.createElement('span');
+  dots.classList.add('dots');
+  dots.textContent = '...';
+  pageNumbers.appendChild(dots);
+}
+
+
 
 // Modal logic (same as index)
 function openModal(item) {
