@@ -47,9 +47,12 @@
       </section>
 
       <div class="media-grid" id="movies-grid"></div>
-      <div style="text-align:center;margin:2rem 0;">
-        <button id="prev-page" class="page-btn" disabled>Prev</button>
-        <span id="page-info" style="margin:0 1rem;">Page 1</span>
+      <!-- Replace the existing pagination div with this -->
+      <div class="pagination">
+        <button id="prev-page" class="page-btn">Prev</button>
+        <div id="page-numbers" class="page-numbers">
+          <!-- Numbered pages will be inserted here by JavaScript -->
+        </div>
         <button id="next-page" class="page-btn">Next</button>
       </div>
     </section>
