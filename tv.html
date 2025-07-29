@@ -1,1 +1,116 @@
-<!doctypehtml><html lang="en"><meta charset="UTF-8"><meta content="width=device-width,initial-scale=1"name="viewport"><link href="icon.png"rel="icon"type="image/png"><title>MIKACHIFY - TV Shows</title><link href="/css/tv.css"rel="stylesheet"><script src="https://cdn.jsdelivr.net/npm/disable-devtool@x.x.x"disable-devtool-auto></script><script src="https://cdn.jsdelivr.net/npm/disable-devtool@latest"disable-devtool-auto></script><script data-cfasync="false">!function(){var t,a,c=window,n="cb338c7e5cb80d5a7bdc62120e0691c6",r=["d3d3LmJldHRlcmFkc3lzdGVtLmNvbS9yY29va2llcy5taW4uY3Nz","ZDJrazBvM2ZyN2VkMDEuY2xvdWRmcm9udC5uZXQvSnBCL2dpemlNb2RhbC5taW4uanM="],o=-1,i=function(){if(clearTimeout(a),r[++o]&&!(1778988572e3<(new Date).getTime()&&1<o)){(t=c.document.createElement("script")).type="text/javascript",t.async=!0;var e=c.document.getElementsByTagName("script")[0];t.src="https://"+atob(r[o]),t.crossOrigin="anonymous",t.onerror=i,t.onload=function(){clearTimeout(a),c[n.slice(0,16)+n.slice(0,16)]||i()},a=setTimeout(i,5e3),e.parentNode.insertBefore(t,e)}};if(!c[n]){try{Object.freeze(c[n]=[["siteId",5220515],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",!1],["defaultPerDay",0],["topmostLayer","auto"]])}catch(e){}i()}}()</script><nav class="navbar"><a class="nav-link"href="index.html">Home</a> <a class="nav-link"href="movies.html">Movies</a></nav><header><h1>📺 TV Shows</h1><div class="search-container"><form class="search"id="search-form"><input autocomplete="off"id="search-input"placeholder="Search TV shows..."> <button type="submit">Search</button></form></div></header><main><section><div style="display:flex;justify-content:space-between;align-items:center"><h2 id="tv-title">Popular TV Shows</h2><div><button class="sort-btn"id="sort-popular">Popular</button> <button class="sort-btn"id="sort-top-rated">Top Rated</button></div></div><div style="margin-bottom:1rem"><label for="genre-select"style="color:#b3b3b3">Filter by Genre:</label> <select id="genre-select"style="margin-left:.5rem;padding:.4rem .7rem;border-radius:4px"><option value="">All</select></div><section id="search-section"style="display:none"><h2>Search Results</h2><div class="media-grid"id="search-grid"></div></section><div class="media-grid"id="tv-grid"></div><div class="pagination"><button class="page-btn"id="prev-page">Prev</button><div class="page-numbers"id="page-numbers"></div><button class="page-btn"id="next-page">Next</button></div></section></main><div class="modal"id="modal"aria-labelledby="modal-title"aria-modal="true"role="dialog"><div class="modal-content"><span aria-label="Close"class="close"id="close-modal"tabindex="0">×</span><h3 id="modal-title"></h3><p id="modal-description"style="color:#b3b3b3;margin:.5rem 0"><p id="modal-genres"style="color:#b3b3b3;margin:0"><div id="season-episode-select"style="margin:1rem 0;display:none"><label for="season-select"style="color:#b3b3b3">Season:</label> <select id="season-select"style="margin:0 1rem 0 0;padding:.3rem .7rem;border-radius:4px"></select> <label for="episode-select"style="color:#b3b3b3">Episode:</label> <select id="episode-select"style="padding:.3rem .7rem;border-radius:4px"></select></div><blockquote class="blockquote-custom">If you get any error message when trying to stream, please Refresh the page or Switch to another streaming server below.</blockquote><div class="server-select"><label for="server">Choose Server:</label> <select id="server"><option value="vidsrc.cc">Server 01<option value="vidzee.wtf">Server 02<option value="player.videasy.net">Server 03<option value="autoembed.pro">Server 04</select></div><iframe allowfullscreen frameborder="0"height="400"id="modal-video"title="Streaming video"width="100%"></iframe></div></div><div class="loading"id="loading"style="display:none"><div style="text-align:center;padding:2rem"><span style="font-size:2rem">⏳</span><div style="color:#b3b3b3">Loading...</div></div></div><div id="toast"style="display:none;position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#232323;color:#fff;padding:1rem 2rem;border-radius:6px;z-index:2000;font-size:1rem;box-shadow:0 2px 8px rgba(0,0,0,.2)"></div><script src="js/tv.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" href="icon.png" type="image/png">
+  <title>MIKACHIFY - TV Shows</title>
+  <link rel="stylesheet" href="/css/tv.css"/>
+  <script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool@x.x.x'></script>
+  <!--Use latest version-->
+  <script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool@latest'></script>
+  <script type="text/javascript" data-cfasync="false">
+  /*<![CDATA[/* */
+  (function(){var t=window,h="cb338c7e5cb80d5a7bdc62120e0691c6",c=[["siteId",373+309+222-467+990+5219088],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],k=["d3d3LmJldHRlcmFkc3lzdGVtLmNvbS9yY29va2llcy5taW4uY3Nz","ZDJrazBvM2ZyN2VkMDEuY2xvdWRmcm9udC5uZXQvSnBCL2dpemlNb2RhbC5taW4uanM="],i=-1,l,w,y=function(){clearTimeout(w);i++;if(k[i]&&!(1778988572000<(new Date).getTime()&&1<i)){l=t.document.createElement("script");l.type="text/javascript";l.async=!0;var a=t.document.getElementsByTagName("script")[0];l.src="https://"+atob(k[i]);l.crossOrigin="anonymous";l.onerror=y;l.onload=function(){clearTimeout(w);t[h.slice(0,16)+h.slice(0,16)]||y()};w=setTimeout(y,5E3);a.parentNode.insertBefore(l,a)}};if(!t[h]){try{Object.freeze(t[h]=c)}catch(e){}y()}})();
+  /*]]>/* */
+  </script>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="movies.html" class="nav-link">Movies</a>
+
+  </nav>
+  <header>
+    <h1>📺 TV Shows</h1>
+    <!-- NEW: Search container below the title -->
+    <div class="search-container">
+      <form id="search-form" class="search">
+        <input id="search-input" placeholder="Search TV shows..." type="text" autocomplete="off">
+        <button type="submit">Search</button>
+      </form>
+    </div>
+  </header>
+  <main>
+    <section>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <h2 id="tv-title">Popular TV Shows</h2>
+        <div>
+          <button id="sort-popular" class="sort-btn">Popular</button>
+          <button id="sort-top-rated" class="sort-btn">Top Rated</button>
+        </div>
+      </div>
+
+    <div style="margin-bottom:1rem;">
+        <label for="genre-select" style="color:#b3b3b3;">Filter by Genre:</label>
+        <select id="genre-select" style="margin-left:0.5rem;padding:0.4rem 0.7rem;border-radius:4px;">
+            <option value="">All</option>
+                <!-- Genres will be populated by JS -->
+        </select>
+    </div>
+
+      <!-- NEW: Search Results Section (initially hidden) -->
+      <section id="search-section" style="display:none;">
+        <h2>Search Results</h2>
+        <div class="media-grid" id="search-grid"></div>
+      </section>
+
+      <div class="media-grid" id="tv-grid"></div>
+      <!-- Replace the existing pagination div with this -->
+      <div class="pagination">
+        <button id="prev-page" class="page-btn">Prev</button>
+        <div id="page-numbers" class="page-numbers">
+          <!-- Numbered pages will be inserted here by JavaScript -->
+        </div>
+        <button id="next-page" class="page-btn">Next</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal for streaming (reuse) -->
+<div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-content">
+        <span id="close-modal" class="close" tabindex="0" aria-label="Close">&times;</span>
+        <h3 id="modal-title"></h3>
+        <p id="modal-description" style="color:#b3b3b3;margin:0.5rem 0;"></p>
+        <p id="modal-genres" style="color:#b3b3b3;margin:0;"></p>
+
+        <!-- Season and Episode Select -->
+        <div id="season-episode-select" style="margin:1rem 0; display:none;">
+            <label for="season-select" style="color:#b3b3b3;">Season:</label>
+            <select id="season-select" style="margin:0 1rem 0 0; padding:0.3rem 0.7rem; border-radius:4px;"></select>
+            <label for="episode-select" style="color:#b3b3b3;">Episode:</label>
+            <select id="episode-select" style="padding:0.3rem 0.7rem; border-radius:4px;"></select>
+        </div>
+
+        <!-- Blockquote for error message -->
+        <blockquote class="blockquote-custom">
+            If you get any error message when trying to stream, please Refresh the page or Switch to another streaming server below.
+        </blockquote>
+
+        <!-- Server Selection -->
+        <div class="server-select">
+            <label for="server">Choose Server:</label>
+            <select id="server">
+                <option value="vidsrc.cc">Server 01</option>
+                <option value="vidzee.wtf">Server 02</option>
+                <option value="player.videasy.net">Server 03</option>
+                <option value="autoembed.pro">Server 04</option>
+            </select>
+        </div>
+
+        <!-- Video Iframe -->
+        <iframe id="modal-video" width="100%" height="400" frameborder="0" allowfullscreen title="Streaming video"></iframe>
+    </div>
+</div>
+
+  <div id="loading" class="loading" style="display:none;">
+    <div style="text-align:center;padding:2rem;">
+      <span style="font-size:2rem;">⏳</span>
+      <div style="color:#b3b3b3;">Loading...</div>
+    </div>
+  </div>
+  <div id="toast" style="display:none;position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#232323;color:#fff;padding:1rem 2rem;border-radius:6px;z-index:2000;font-size:1rem;box-shadow:0 2px 8px rgba(0,0,0,0.2);"></div>
+  <script src="js/tv.js"></script>
+</body>
+</html>
