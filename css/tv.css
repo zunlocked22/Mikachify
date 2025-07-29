@@ -368,3 +368,60 @@ img, iframe {
   font-size: 1rem;
   box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
+
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.page-btn {
+  padding: 8px 15px;
+  background-color: #1a1a1a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.page-btn:hover {
+  background-color: #333;
+}
+
+.page-btn:disabled {
+  background-color: #444;
+  cursor: not-allowed;
+}
+
+.page-numbers {
+  display: flex;
+  gap: 5px;
+}
+
+.page-number {
+  padding: 8px 12px;
+  margin: 0 2px;
+  cursor: pointer;
+  background: #333;
+  color: white;
+  border: none;
+  border-radius: 3px;
+}
+
+
+.page-number:hover {
+  background-color: #333;
+}
+
+.page-number.active {
+  background: #E50914 !important;
+  font-weight: bold;
+}
+.dots {
+  padding: 8px 5px;
+}
