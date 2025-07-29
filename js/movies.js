@@ -1,1 +1,441 @@
-const o=M;(function(K,C){const G=M,u=K();while(!![]){try{const E=-parseInt(G(0xc6))/0x1*(parseInt(G(0xbb))/0x2)+-parseInt(G(0xd7))/0x3*(parseInt(G(0xe0))/0x4)+-parseInt(G(0xf4))/0x5*(-parseInt(G(0xd1))/0x6)+parseInt(G(0x9e))/0x7+parseInt(G(0xff))/0x8*(parseInt(G(0xfc))/0x9)+parseInt(G(0xb9))/0xa*(parseInt(G(0x10a))/0xb)+-parseInt(G(0x107))/0xc;if(E===C)break;else u['push'](u['shift']());}catch(H){u['push'](u['shift']());}}}(J,0x764df));const API_KEY=o(0x116),BASE_URL=o(0xb6),IMG_URL=o(0xca),moviesGrid=document[o(0xa2)]('movies-grid'),loading=document[o(0xa2)](o(0xed)),toast=document[o(0xa2)]('toast'),modal=document[o(0xa2)]('modal'),closeModalBtn=document['getElementById']('close-modal'),modalTitle=document[o(0xa2)](o(0xf1)),modalVideo=document[o(0xa2)](o(0xda)),serverSelect=document['getElementById']('server'),prevPageBtn=document['getElementById']('prev-page'),nextPageBtn=document[o(0xa2)](o(0x117)),sortPopularBtn=document[o(0xa2)](o(0xf7)),sortOldestBtn=document[o(0xa2)]('sort-oldest'),moviesTitle=document[o(0xa2)](o(0xbe)),genreSelect=document['getElementById'](o(0xab)),sortTopRatedBtn=document[o(0xa2)](o(0x11c)),searchForm=document[o(0xa2)](o(0xe7)),searchInput=document[o(0xa2)](o(0xd3)),searchGrid=document[o(0xa2)]('search-grid'),searchSection=document[o(0xa2)](o(0x9c));let genres=[],selectedGenre='',currentPage=0x1,totalPages=0x1,sortBy='popularity.desc',currentItem=null;function showToast(K,C=0x9c4){const h=o;toast[h(0xb4)]=K,toast[h(0x10f)][h(0xd9)]=h(0xa8),setTimeout(()=>{const j=h;toast[j(0x10f)]['display']='none';},C);}function showLoading(){const f=o;loading['style'][f(0xd9)]=f(0xa8);}function hideLoading(){const i=o;loading[i(0x10f)]['display']=i(0x104);}function debounce(K,C){let u;return function(...E){clearTimeout(u),u=setTimeout(()=>K['apply'](this,E),C);};}async function fetchMovies(K=0x1,C='popularity.desc'){const B=o;try{showLoading(),searchSection[B(0x10f)][B(0xd9)]=B(0x104),moviesGrid[B(0x10f)][B(0xd9)]=B(0xdd),prevPageBtn[B(0x10f)][B(0xd9)]='',nextPageBtn[B(0x10f)][B(0xd9)]='';let u=BASE_URL+B(0xc2)+API_KEY+B(0xa4)+K;if(C===B(0xfa))u+=B(0x120);else C==='top_rated_latest'&&(u+='&sort_by=vote_average.desc',u+='&primary_release_date.gte=1900-01-01&primary_release_date.lte=2025-12-31',u+=B(0xea),u+=B(0x119));if(selectedGenre)u+='&with_genres='+selectedGenre;const E=await fetch(u);if(!E['ok'])throw new Error(B(0xcc));const H=await E[B(0xef)]();totalPages=Math[B(0xb3)](H[B(0xb8)],0x1f4),displayItems(H['results'],moviesGrid),updatePagination(currentPage,totalPages),prevPageBtn[B(0xa9)]=currentPage===0x1,nextPageBtn[B(0xa9)]=currentPage===totalPages;if(H[B(0xf3)][B(0xbc)]===0x0)showToast('No\x20movies\x20found.');}catch(w){showToast(B(0x111)),moviesGrid[B(0xc5)]=B(0xe5);}finally{hideLoading();}}async function searchMovies(K){const V=o;try{showLoading(),moviesGrid['style'][V(0xd9)]=V(0x104),searchSection[V(0x10f)][V(0xd9)]=V(0xa8),prevPageBtn[V(0x10f)][V(0xd9)]=V(0x104),nextPageBtn[V(0x10f)][V(0xd9)]='none',pageInfo['style'][V(0xd9)]=V(0x104);const C=BASE_URL+V(0xdb)+API_KEY+V(0xf5)+encodeURIComponent(K),u=await fetch(C);if(!u['ok'])throw new Error(V(0xc7));const E=await u[V(0xef)]();displayItems(E['results'],searchGrid);if(E[V(0xf3)]['length']===0x0)showToast('No\x20results\x20found.');else showToast(V(0xf2)+E[V(0xf3)][V(0xbc)]+V(0x9d)+(E['results'][V(0xbc)]>0x1?'s':'')+'.');}catch(H){showToast(V(0xfb)),searchGrid[V(0xc5)]=V(0xe2);}finally{hideLoading();}}async function fetchGenres(){const c=o;try{const K=BASE_URL+'/genre/movie/list?api_key='+API_KEY,C=await fetch(K);if(!C['ok'])throw new Error('Failed\x20to\x20fetch\x20genres');const u=await C[c(0xef)]();genres=u[c(0xae)],genreSelect['innerHTML']=c(0x109)+genres[c(0x112)](E=>c(0xc1)+E['id']+'\x22>'+E[c(0x9f)]+c(0xe4))['join']('');}catch(E){showToast('Error\x20loading\x20genres.');}}function displayItems(K,C){const z=o;C['innerHTML']='';if(!K||K[z(0xbc)]===0x0){C[z(0xc5)]=z(0x106);return;}K[z(0x105)](u=>{const l=z,E=u[l(0x103)]||u['name'],H=u[l(0xc0)]?IMG_URL+u[l(0xc0)]:l(0xad),w=(u[l(0xd2)]||'')['slice'](0x0,0x4),m=u[l(0xf9)]?u[l(0xf9)][l(0xde)](0x1):'N/A',A=document['createElement'](l(0x100));A[l(0xb2)]=l(0xba),A[l(0xc4)](l(0x118),'0'),A[l(0xc4)](l(0x10b),'button'),A[l(0xc4)](l(0xdc),E),A[l(0xc5)]=l(0xe9)+H+l(0xa0)+E+l(0x11e)+E+l(0x121)+w+'\x20&middot;\x20⭐\x20'+m+l(0xf0),A[l(0xaf)]=()=>openModal(u),A[l(0xe1)]=g=>{const r=l;if(g[r(0xd6)]==='Enter'||g[r(0xd6)]==='\x20')openModal(u);},C[l(0xd8)](A);});}function updatePagination(){const y=o,K=document['getElementById'](y(0x9b));K[y(0xc5)]='';const C=H=>{const P=y,w=document['createElement']('button');w[P(0xb2)]=P(0xcb),w[P(0xb4)]=H;if(H===currentPage)w[P(0xd0)][P(0x10e)](P(0xbd));return w[P(0xa6)](P(0xb7),()=>{const p=P;H!==currentPage&&(currentPage=H,window[p(0x114)]['pathname'][p(0x122)](p(0x108))?fetchMovies(currentPage,sortBy):fetchTV(currentPage,sortBy));}),w;};K[y(0xd8)](C(0x1));if(currentPage>0x3){const H=document[y(0xa3)](y(0xb1));H[y(0xb2)]=y(0xe8),H[y(0xb4)]=y(0xc9),K[y(0xd8)](H);}const u=Math[y(0xfd)](0x2,currentPage-0x1),E=Math[y(0xb3)](totalPages-0x1,currentPage+0x1);for(let w=u;w<=E;w++){K[y(0xd8)](C(w));}if(currentPage<totalPages-0x2){const m=document[y(0xa3)](y(0xb1));m[y(0xb2)]=y(0xe8),m[y(0xb4)]='...',K[y(0xd8)](m);}totalPages>0x1&&K[y(0xd8)](C(totalPages));}function M(K,C){const u=J();return M=function(E,H){E=E-0x9a;let w=u[E];return w;},M(K,C);}function createPageNumber(K,C){const q=o,u=document[q(0xa2)](q(0x9b)),E=document[q(0xa3)](q(0x10d));E[q(0xd0)][q(0x10e)](q(0xcb)),K===C&&E[q(0xd0)][q(0x10e)](q(0xbd)),E['textContent']=K,E['addEventListener'](q(0xb7),()=>{const d=q;C=K,window[d(0x114)][d(0x11a)][d(0x122)](d(0x108))?fetchMovies(C,sortBy):fetchTV(C,sortBy),updatePagination(C,totalPages);}),u[q(0xd8)](E);}function createDots(){const Q=o,K=document[Q(0xa2)]('page-numbers'),C=document[Q(0xa3)](Q(0xb1));C[Q(0xd0)]['add'](Q(0xe8)),C[Q(0xb4)]=Q(0xc9),K[Q(0xd8)](C);}function openModal(K){const Z=o;currentItem=K,modalTitle[Z(0xb4)]=K[Z(0x103)]||K['name'],document['getElementById']('modal-description')['textContent']=K[Z(0xdf)]||Z(0xa1);const C=K[Z(0xf6)][Z(0x112)](u=>{const O=Z,E=genres[O(0x11d)](H=>H['id']===u);return E?E['name']:'';})['filter'](Boolean);document[Z(0xa2)](Z(0xeb))[Z(0xb4)]=C['length']>0x0?Z(0x113)+C['join'](',\x20'):Z(0x102),serverSelect['value']=Z(0xfe),changeServer(),modal[Z(0x10f)][Z(0xd9)]=Z(0xf8),closeModalBtn[Z(0xb5)]();}function closeModal(){const b=o;modal[b(0x10f)][b(0xd9)]=b(0x104),modalVideo[b(0xc3)]='',currentItem=null;}function J(){const n=['trim','block','disabled','smooth','genre-select','Enter','https://via.placeholder.com/300x450?text=No+Image','genres','onclick','scrollTo','span','className','min','textContent','focus','https://api.themoviedb.org/3','click','total_pages','7136940brXDSm','movie-card','16CzuPDu','length','active','movies-title','top_rated_latest','poster_path','<option\x20value=\x22','/discover/movie?api_key=','src','setAttribute','innerHTML','101335JEXfBN','Failed\x20to\x20search','input','...','https://image.tmdb.org/t/p/original','page-number','Failed\x20to\x20fetch\x20movies','remove','preventDefault','sort','classList','24mCpzXK','release_date','search-input','onchange','https://vidsrc.cc/v2/embed/','key','9fSqTpR','appendChild','display','modal-video','/search/movie?api_key=','aria-label','grid','toFixed','overview','130056kRTEoM','onkeydown','<p\x20style=\x22color:#b3b3b3;\x22>Failed\x20to\x20search.</p>','keydown','</option>','<p\x20style=\x22color:#b3b3b3;\x22>Failed\x20to\x20load\x20movies.</p>','random','search-form','dots','\x0a\x20\x20\x20\x20\x20\x20<img\x20class=\x22movie-poster\x22\x20src=\x22','&sort_by=primary_release_date.desc','modal-genres','https://autoembed.pro/embed/','loading','target','json','</div>\x0a\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20','modal-title','Found\x20','results','1170655kflYfo','&query=','genre_ids','sort-popular','flex','vote_average','popularity.desc','Error\x20searching.\x20Please\x20try\x20again.','5382RHKZzg','max','vidsrc.cc','3000LOJiXc','div','value','No\x20genres\x20available.','title','none','forEach','<p\x20style=\x22color:#b3b3b3;\x22>No\x20movies\x20found.</p>','10917516QfUgdS','movies.html','<option\x20value=\x22\x22>All</option>','11LrvTQJ','role','movie','button','add','style','slice','Error\x20loading\x20movies.','map','Genres:\x20','location','vidzee.wtf','e388f63b7dffb7485770ed8445c1f4a6','next-page','tabindex','&vote_count.gte=100&vote_average.gte=6.0','pathname','autoembed.pro','sort-top-rated','find','\x22\x20loading=\x22lazy\x22>\x0a\x20\x20\x20\x20\x20\x20<div\x20class=\x22movie-info\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22movie-title\x22>','https://player.vidzee.wtf/embed/','&sort_by=popularity.desc','</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22movie-meta\x22>','includes','Popular\x20Movies','page-numbers','search-section','\x20result','2996854pCPDvg','name','\x22\x20alt=\x22','No\x20description\x20available.','getElementById','createElement','&page=','Top\x20Rated\x20Movies','addEventListener'];J=function(){return n;};return J();}function changeServer(){const N=o;if(!currentItem)return;const K=serverSelect[N(0x101)],C=N(0x10c);let u='';if(K===N(0xfe))u=N(0xd5)+C+'/'+currentItem['id'];else{if(K===N(0x115))u=N(0x11f)+C+'/'+currentItem['id'];else{if(K==='player.videasy.net')u='https://player.videasy.net/'+C+'/'+currentItem['id'];else K===N(0x11b)&&(u=N(0xec)+C+'/'+currentItem['id']);}}modalVideo['src']=u;}prevPageBtn[o(0xaf)]=()=>{const t=o;currentPage>0x1&&(currentPage--,fetchMovies(currentPage,sortBy),window[t(0xb0)]({'top':0x0,'behavior':t(0xaa)}));},nextPageBtn[o(0xaf)]=()=>{const R=o;currentPage<totalPages&&(currentPage++,fetchMovies(currentPage,sortBy),window[R(0xb0)]({'top':0x0,'behavior':'smooth'}));},sortPopularBtn[o(0xaf)]=()=>{const I=o;sortBy='popularity.desc',moviesTitle[I(0xb4)]=I(0x9a),currentPage=0x1,fetchMovies(currentPage,sortBy),sortPopularBtn['classList']['add']('active'),sortTopRatedBtn[I(0xd0)][I(0xcd)](I(0xbd)),prevPageBtn[I(0x10f)][I(0xd9)]='',nextPageBtn['style']['display']='',pageInfo[I(0x10f)][I(0xd9)]='',moviesGrid['style'][I(0xd9)]='grid',searchSection[I(0x10f)]['display']='none';},sortTopRatedBtn[o(0xaf)]=async()=>{const D=o;moviesGrid[D(0x10f)][D(0xd9)]=D(0xdd),searchSection[D(0x10f)]['display']='none',sortBy=D(0xbf),moviesTitle[D(0xb4)]=D(0xa5),currentPage=0x1,await fetchMovies(currentPage,sortBy),sortTopRatedBtn[D(0xd0)]['add'](D(0xbd)),sortPopularBtn[D(0xd0)][D(0xcd)]('active');};function getRandomItems(K,C){const a=o,u=K[a(0xcf)](()=>0.5-Math[a(0xe6)]());return u[a(0x110)](0x0,C);}searchInput['addEventListener'](o(0xc8),debounce(()=>{const F=o,K=searchInput['value']['trim']();K?searchMovies(K):(moviesTitle[F(0xb4)]=F(0x9a),currentPage=0x1,fetchMovies(currentPage,sortBy),sortPopularBtn[F(0xd0)][F(0x10e)](F(0xbd)),sortTopRatedBtn[F(0xd0)][F(0xcd)](F(0xbd)),prevPageBtn[F(0x10f)]['display']='',nextPageBtn[F(0x10f)][F(0xd9)]='',pageInfo[F(0x10f)][F(0xd9)]='',moviesGrid[F(0x10f)][F(0xd9)]='grid',searchSection['style']['display']='none');},0x190)),searchForm['onsubmit']=K=>{const T=o;K[T(0xce)]();const C=searchInput[T(0x101)][T(0xa7)]();C?searchMovies(C):(moviesTitle[T(0xb4)]=T(0x9a),currentPage=0x1,fetchMovies(currentPage,sortBy),sortPopularBtn[T(0xd0)][T(0x10e)]('active'),sortTopRatedBtn[T(0xd0)][T(0xcd)](T(0xbd)),prevPageBtn[T(0x10f)][T(0xd9)]='',nextPageBtn[T(0x10f)]['display']='',pageInfo['style'][T(0xd9)]='',moviesGrid[T(0x10f)][T(0xd9)]='grid',searchSection[T(0x10f)]['display']=T(0x104));},closeModalBtn['onclick']=closeModal,closeModalBtn[o(0xe1)]=K=>{const x=o;if(K['key']===x(0xac)||K[x(0xd6)]==='\x20')closeModal();},window[o(0xaf)]=K=>{const U=o;if(K[U(0xee)]===modal)closeModal();},window['addEventListener'](o(0xe3),K=>{const W=o;if(modal[W(0x10f)]['display']===W(0xf8)&&K[W(0xd6)]==='Escape')closeModal();}),serverSelect[o(0xd4)]=changeServer,genreSelect['onchange']=()=>{const L=o;selectedGenre=genreSelect[L(0x101)],currentPage=0x1,fetchMovies(currentPage,sortBy),prevPageBtn[L(0x10f)]['display']='',nextPageBtn[L(0x10f)][L(0xd9)]='',pageInfo[L(0x10f)]['display']='',moviesGrid[L(0x10f)][L(0xd9)]=L(0xdd),searchSection[L(0x10f)][L(0xd9)]=L(0x104);},sortPopularBtn[o(0xd0)][o(0x10e)]('active'),fetchGenres(),fetchMovies(currentPage,sortBy);
+const API_KEY = 'e388f63b7dffb7485770ed8445c1f4a6';
+const BASE_URL = 'https://api.themoviedb.org/3';
+const IMG_URL = 'https://image.tmdb.org/t/p/original';
+
+const moviesGrid = document.getElementById('movies-grid');
+const loading = document.getElementById('loading');
+const toast = document.getElementById('toast');
+const modal = document.getElementById('modal');
+const closeModalBtn = document.getElementById('close-modal');
+const modalTitle = document.getElementById('modal-title');
+const modalVideo = document.getElementById('modal-video');
+const serverSelect = document.getElementById('server');
+//const pageInfo = document.getElementById('page-info');
+const prevPageBtn = document.getElementById('prev-page');
+const nextPageBtn = document.getElementById('next-page');
+const sortPopularBtn = document.getElementById('sort-popular');
+const sortOldestBtn = document.getElementById('sort-oldest'); // This button doesn't exist in HTML, but keeping for now
+const moviesTitle = document.getElementById('movies-title');
+const genreSelect = document.getElementById('genre-select');
+
+const sortTopRatedBtn = document.getElementById('sort-top-rated');
+
+
+// NEW: Search elements - Updated to match new HTML structure
+const searchForm = document.getElementById('search-form');
+const searchInput = document.getElementById('search-input');
+const searchGrid = document.getElementById('search-grid');
+const searchSection = document.getElementById('search-section'); // The new section for search results
+
+let genres = [];
+let selectedGenre = '';
+
+let currentPage = 1;
+let totalPages = 1;
+let sortBy = 'popularity.desc'; // or 'release_date.asc'
+let currentItem = null;
+
+// Toast
+function showToast(msg, duration = 2500) {
+  toast.textContent = msg;
+  toast.style.display = 'block';
+  setTimeout(() => { toast.style.display = 'none'; }, duration);
+}
+
+// Loading
+function showLoading() { loading.style.display = 'block'; }
+function hideLoading() { loading.style.display = 'none'; }
+
+// NEW: Debounce function (copied from app.js)
+function debounce(func, delay) {
+  let timeout;
+  return function(...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), delay);
+  };
+}
+
+// Fetch movies (main grid)
+async function fetchMovies(page = 1, sort = 'popularity.desc') {
+  try {
+    showLoading();
+    searchSection.style.display = 'none';
+    moviesGrid.style.display = 'grid';
+
+    prevPageBtn.style.display = '';
+    nextPageBtn.style.display = '';
+
+    let url = `${BASE_URL}/discover/movie?api_key=${API_KEY}&page=${page}`;
+
+    if (sort === 'popularity.desc') {
+        url += `&sort_by=popularity.desc`;
+    } else if (sort === 'top_rated_latest') {
+        url += `&sort_by=vote_average.desc`;
+        url += `&primary_release_date.gte=1900-01-01&primary_release_date.lte=2025-12-31`;
+        url += `&sort_by=primary_release_date.desc`;
+        url += `&vote_count.gte=100&vote_average.gte=6.0`;
+    }
+
+    if (selectedGenre) url += `&with_genres=${selectedGenre}`;
+    
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Failed to fetch movies');
+    const data = await res.json();
+    totalPages = Math.min(data.total_pages, 500);
+    displayItems(data.results, moviesGrid);
+    
+    // Update pagination UI
+    updatePagination(currentPage, totalPages);
+    
+    prevPageBtn.disabled = currentPage === 1;
+    nextPageBtn.disabled = currentPage === totalPages;
+    
+    if (data.results.length === 0) showToast('No movies found.');
+  } catch (err) {
+    showToast('Error loading movies.');
+    moviesGrid.innerHTML = '<p style="color:#b3b3b3;">Failed to load movies.</p>';
+  } finally {
+    hideLoading();
+  }
+}
+   
+
+// NEW: Search movies function (adapted from app.js)
+async function searchMovies(query) {
+  try {
+    showLoading();
+    // Hide main movie grid and show search results grid
+    moviesGrid.style.display = 'none';
+    searchSection.style.display = 'block';
+    // Hide pagination for search results
+    prevPageBtn.style.display = 'none';
+    nextPageBtn.style.display = 'none';
+    pageInfo.style.display = 'none';
+
+
+    const url = `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Failed to search');
+    const data = await res.json();
+    displayItems(data.results, searchGrid); // Use displayItems for consistency
+    if (data.results.length === 0) showToast('No results found.');
+    else showToast(`Found ${data.results.length} result${data.results.length > 1 ? 's' : ''}.`);
+  } catch (err) {
+    showToast('Error searching. Please try again.');
+    searchGrid.innerHTML = '<p style="color:#b3b3b3;">Failed to search.</p>';
+  } finally {
+    hideLoading();
+  }
+}
+
+
+async function fetchGenres() {
+  try {
+    const url = `${BASE_URL}/genre/movie/list?api_key=${API_KEY}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Failed to fetch genres');
+    const data = await res.json();
+    genres = data.genres;
+    genreSelect.innerHTML = `<option value="">All</option>` +
+      genres.map(g => `<option value="${g.id}">${g.name}</option>`).join('');
+  } catch (err) {
+    showToast('Error loading genres.');
+  }
+}
+
+// Renamed from displayMovies to displayItems for reusability with searchGrid
+function displayItems(items, grid) {
+  grid.innerHTML = '';
+  if (!items || items.length === 0) {
+    grid.innerHTML = '<p style="color:#b3b3b3;">No movies found.</p>';
+    return;
+  }
+  items.forEach(item => {
+    const title = item.title || item.name;
+    const poster = item.poster_path ? IMG_URL + item.poster_path : 'https://via.placeholder.com/300x450?text=No+Image';
+    const year = (item.release_date || '').slice(0,4);
+    const vote = item.vote_average ? item.vote_average.toFixed(1) : 'N/A';
+
+    const card = document.createElement('div');
+    card.className = 'movie-card';
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-label', title);
+    card.innerHTML = `
+      <img class="movie-poster" src="${poster}" alt="${title}" loading="lazy">
+      <div class="movie-info">
+        <div class="movie-title">${title}</div>
+        <div class="movie-meta">${year} &middot; ⭐ ${vote}</div>
+      </div>
+    `;
+    card.onclick = () => openModal(item);
+    card.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') openModal(item); };
+    grid.appendChild(card);
+  });
+}
+
+
+
+function updatePagination() {
+  const container = document.getElementById('page-numbers');
+  container.innerHTML = '';
+
+  // Create a page button
+  const makeBtn = (num) => {
+    const btn = document.createElement('button');
+    btn.className = 'page-number';
+    btn.textContent = num;
+    if(num === currentPage) btn.classList.add('active');
+    
+    btn.addEventListener('click', () => {
+      if(num !== currentPage) {
+        currentPage = num;
+        if(window.location.pathname.includes('movies.html')) {
+          fetchMovies(currentPage, sortBy);
+        } else {
+          fetchTV(currentPage, sortBy);
+        }
+      }
+    });
+    
+    return btn;
+  };
+
+  // Always show first page
+  container.appendChild(makeBtn(1));
+
+  // Show left gap if needed
+  if(currentPage > 3) {
+    const dots = document.createElement('span');
+    dots.className = 'dots';
+    dots.textContent = '...';
+    container.appendChild(dots);
+  }
+
+  // Middle pages (current-1 to current+1)
+  const start = Math.max(2, currentPage - 1);
+  const end = Math.min(totalPages - 1, currentPage + 1);
+  for(let i = start; i <= end; i++) {
+    container.appendChild(makeBtn(i));
+  }
+
+  // Show right gap if needed
+  if(currentPage < totalPages - 2) {
+    const dots = document.createElement('span');
+    dots.className = 'dots';
+    dots.textContent = '...';
+    container.appendChild(dots);
+  }
+
+  // Show last page if different from first
+  if(totalPages > 1) {
+    container.appendChild(makeBtn(totalPages));
+  }
+}
+
+
+function createPageNumber(number, currentPage) {
+  const pageNumbers = document.getElementById('page-numbers');
+
+  // Create a button for the page number
+  const pageNumber = document.createElement('button');
+  pageNumber.classList.add('page-number');
+
+  // Set the active class if this is the current page
+  if (number === currentPage) {
+    pageNumber.classList.add('active');
+  }
+
+  pageNumber.textContent = number;
+
+  // Add click event listener to change the page
+  pageNumber.addEventListener('click', () => {
+    // Update the current page
+    currentPage = number;
+
+    // Fetch the movies or TV shows for the selected page
+    if (window.location.pathname.includes('movies.html')) {
+      fetchMovies(currentPage, sortBy);
+    } else {
+      fetchTV(currentPage, sortBy);
+    }
+
+    // Update the pagination to reflect the new current page
+    updatePagination(currentPage, totalPages);
+  });
+
+  // Append the page number button to the pagination container
+  pageNumbers.appendChild(pageNumber);
+}
+
+
+function createDots() {
+  const pageNumbers = document.getElementById('page-numbers');
+  const dots = document.createElement('span');
+  dots.classList.add('dots');
+  dots.textContent = '...';
+  pageNumbers.appendChild(dots);
+}
+
+
+
+// Modal logic (same as index)
+function openModal(item) {
+  currentItem = item;
+  modalTitle.textContent = item.title || item.name;
+  document.getElementById('modal-description').textContent = item.overview || 'No description available.';
+
+  // Set genres
+  const genreNames = item.genre_ids.map(id => {
+    const genre = genres.find(g => g.id === id);
+    return genre ? genre.name : '';
+  }).filter(Boolean);
+  document.getElementById('modal-genres').textContent = genreNames.length > 0 ? `Genres: ${genreNames.join(', ')}` : 'No genres available.';
+
+  serverSelect.value = "vidsrc.cc";
+  changeServer();
+  modal.style.display = 'flex';
+  closeModalBtn.focus();
+}
+
+function closeModal() {
+  modal.style.display = 'none';
+  modalVideo.src = '';
+  currentItem = null;
+}
+function changeServer() {
+  if (!currentItem) return;
+  const server = serverSelect.value;
+  const type = "movie";
+  let embedURL = "";
+  if (server === "vidsrc.cc") {
+    embedURL = `https://vidsrc.cc/v2/embed/${type}/${currentItem.id}`;
+  } else if (server === "vidzee.wtf") {
+    embedURL = `https://player.vidzee.wtf/embed/${type}/${currentItem.id}`;
+  }else if (server === "player.videasy.net") {
+    embedURL = `https://player.videasy.net/${type}/${currentItem.id}`;
+  }else if (server === "autoembed.pro") {
+    embedURL = `https://autoembed.pro/embed/${type}/${currentItem.id}`;
+  }
+  modalVideo.src = embedURL;
+}
+
+// Event listeners
+prevPageBtn.onclick = () => {
+  if (currentPage > 1) {
+    currentPage--;
+    fetchMovies(currentPage, sortBy);
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+};
+nextPageBtn.onclick = () => {
+  if (currentPage < totalPages) {
+    currentPage++;
+    fetchMovies(currentPage, sortBy);
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+};
+sortPopularBtn.onclick = () => {
+  sortBy = 'popularity.desc';
+  moviesTitle.textContent = 'Popular Movies';
+  currentPage = 1;
+  fetchMovies(currentPage, sortBy);
+  sortPopularBtn.classList.add('active');
+  sortTopRatedBtn.classList.remove('active'); // Ensure other sort buttons are inactive
+  // Show pagination and main grid
+  prevPageBtn.style.display = '';
+  nextPageBtn.style.display = '';
+  pageInfo.style.display = '';
+  moviesGrid.style.display = 'grid';
+  searchSection.style.display = 'none';
+};
+
+//top rated button
+    sortTopRatedBtn.onclick = async () => {
+      moviesGrid.style.display = 'grid';
+      searchSection.style.display = 'none';
+
+      // NEW: Set sortBy to the specific value for Top Rated (Latest)
+      sortBy = 'top_rated_latest';
+      moviesTitle.textContent = 'Top Rated Movies';
+      currentPage = 1;
+
+      await fetchMovies(currentPage, sortBy); // Pass the new sortBy value
+
+      sortTopRatedBtn.classList.add('active');
+      sortPopularBtn.classList.remove('active');
+    };
+    
+function getRandomItems(arr, count) {
+  const shuffled = arr.sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, count);
+}
+
+// NEW: Debounced search (on input)
+searchInput.addEventListener('input', debounce(() => {
+  const query = searchInput.value.trim();
+  if (query) {
+    searchMovies(query);
+  } else {
+    // If search input is cleared, revert to showing popular movies
+    moviesTitle.textContent = 'Popular Movies';
+    currentPage = 1;
+    fetchMovies(currentPage, sortBy);
+    sortPopularBtn.classList.add('active');
+    sortTopRatedBtn.classList.remove('active');
+    // Show pagination and main grid
+    prevPageBtn.style.display = '';
+    nextPageBtn.style.display = '';
+    pageInfo.style.display = '';
+    moviesGrid.style.display = 'grid';
+    searchSection.style.display = 'none';
+  }
+}, 400));
+
+// NEW: On submit (for pressing enter)
+searchForm.onsubmit = (e) => {
+  e.preventDefault();
+  const query = searchInput.value.trim();
+  if (query) {
+    searchMovies(query);
+  } else {
+    // If search input is cleared, revert to showing popular movies
+    moviesTitle.textContent = 'Popular Movies';
+    currentPage = 1;
+    fetchMovies(currentPage, sortBy);
+    sortPopularBtn.classList.add('active');
+    sortTopRatedBtn.classList.remove('active');
+    // Show pagination and main grid
+    prevPageBtn.style.display = '';
+    nextPageBtn.style.display = '';
+    pageInfo.style.display = '';
+    moviesGrid.style.display = 'grid';
+    searchSection.style.display = 'none';
+  }
+};
+
+
+closeModalBtn.onclick = closeModal;
+closeModalBtn.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') closeModal(); };
+window.onclick = (e) => { if (e.target === modal) closeModal(); };
+window.addEventListener('keydown', (e) => {
+  if (modal.style.display === 'flex' && e.key === 'Escape') closeModal();
+});
+serverSelect.onchange = changeServer;
+
+genreSelect.onchange = () => {
+  selectedGenre = genreSelect.value;
+  currentPage = 1;
+  fetchMovies(currentPage, sortBy);
+  // Ensure pagination is visible when filtering by genre
+  prevPageBtn.style.display = '';
+  nextPageBtn.style.display = '';
+  pageInfo.style.display = '';
+  moviesGrid.style.display = 'grid';
+  searchSection.style.display = 'none';
+};
+
+// Initial load
+sortPopularBtn.classList.add('active');
+fetchGenres();
+fetchMovies(currentPage, sortBy);
