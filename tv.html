@@ -3,12 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="icon" href="icon.png" type="image/png">
   <title>MIKACHIFY - TV Shows</title>
-  <!--Use the specified version-->
-  <script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool@x.x.x'></script>
-  <!--Use latest version-->
-  <script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool@latest'></script>
   <link rel="stylesheet" href="/css/tv.css"/>
 </head>
 <body>
@@ -52,9 +47,12 @@
       </section>
 
       <div class="media-grid" id="tv-grid"></div>
-      <div style="text-align:center;margin:2rem 0;">
-        <button id="prev-page" class="page-btn" disabled>Prev</button>
-        <span id="page-info" style="margin:0 1rem;">Page 1</span>
+      <!-- Replace the existing pagination div with this -->
+      <div class="pagination">
+        <button id="prev-page" class="page-btn">Prev</button>
+        <div id="page-numbers" class="page-numbers">
+          <!-- Numbered pages will be inserted here by JavaScript -->
+        </div>
         <button id="next-page" class="page-btn">Next</button>
       </div>
     </section>
